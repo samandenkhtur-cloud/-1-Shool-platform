@@ -1,0 +1,249 @@
+name: school-platform
+
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: sp-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: auth_db
+    # Production-style: do NOT publish DB port to host.
+    # Other containers access it via `mysql:3306` on the `sp-net` network.
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-prootpassword"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 20s
+    networks:
+      - sp-net
+
+  redis:
+    image: redis:7-alpine
+    container_name: sp-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    networks:
+      - sp-net
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: sp-rabbitmq
+    restart: unless-stopped
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    networks:
+      - sp-net
+
+  auth-service:
+    build:
+      context: .
+      dockerfile: docker/auth.Dockerfile
+    container_name: sp-auth
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: 3001
+      DATABASE_URL: mysql://root:rootpassword@mysql:3306/auth_db
+      JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET:-replace_me_access_secret_1234567890}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET:-replace_me_refresh_secret_1234567890}
+      JWT_ISSUER: school-platform
+      JWT_AUDIENCE: school-platform-api
+      JWT_ACCESS_EXPIRES_IN: 15m
+      JWT_REFRESH_EXPIRES_IN: 30d
+      # Dev convenience: seed an initial admin account if missing.
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@example.com}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-Admin123!}
+      CORS_ORIGIN: "*"
+      REDIS_URL: redis://redis:6379
+      CACHE_TTL_SECONDS: 60
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+      RABBITMQ_EXCHANGE: school.events
+      ENABLE_METRICS: "false"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    ports:
+      - "3001:3001"
+    networks:
+      - sp-net
+
+  student-service:
+    build:
+      context: .
+      dockerfile: docker/student.Dockerfile
+    container_name: sp-student
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: 3002
+      DATABASE_URL: mysql://root:rootpassword@mysql:3306/student_db
+      JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET:-replace_me_access_secret_1234567890}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET:-replace_me_refresh_secret_1234567890}
+      JWT_ISSUER: school-platform
+      JWT_AUDIENCE: school-platform-api
+      JWT_ACCESS_EXPIRES_IN: 15m
+      JWT_REFRESH_EXPIRES_IN: 30d
+      CORS_ORIGIN: "*"
+      REDIS_URL: redis://redis:6379
+      CACHE_TTL_SECONDS: 60
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+      RABBITMQ_EXCHANGE: school.events
+      ENABLE_METRICS: "false"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    ports:
+      - "3002:3002"
+    networks:
+      - sp-net
+
+  course-service:
+    build:
+      context: .
+      dockerfile: docker/course.Dockerfile
+    container_name: sp-course
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: 3003
+      DATABASE_URL: mysql://root:rootpassword@mysql:3306/course_db
+      JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET:-replace_me_access_secret_1234567890}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET:-replace_me_refresh_secret_1234567890}
+      JWT_ISSUER: school-platform
+      JWT_AUDIENCE: school-platform-api
+      JWT_ACCESS_EXPIRES_IN: 15m
+      JWT_REFRESH_EXPIRES_IN: 30d
+      CORS_ORIGIN: "*"
+      REDIS_URL: redis://redis:6379
+      CACHE_TTL_SECONDS: 60
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+      RABBITMQ_EXCHANGE: school.events
+      ENABLE_METRICS: "false"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    ports:
+      - "3003:3003"
+    networks:
+      - sp-net
+
+  notification-service:
+    build:
+      context: .
+      dockerfile: docker/notification.Dockerfile
+    container_name: sp-notification
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: 3004
+      JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET:-replace_me_access_secret_1234567890}
+      JWT_ISSUER: school-platform
+      JWT_AUDIENCE: school-platform-api
+      CORS_ORIGIN: "*"
+      REDIS_URL: redis://redis:6379
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+      RABBITMQ_EXCHANGE: school.events
+      RABBITMQ_PREFETCH: 10
+      RABBITMQ_MAX_RETRIES: 5
+      RABBITMQ_RETRY_BASE_DELAY_MS: 1000
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    ports:
+      - "3004:3004"
+    networks:
+      - sp-net
+
+  api-gateway:
+    build:
+      context: .
+      dockerfile: docker/gateway.Dockerfile
+    container_name: sp-gateway
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      GATEWAY_PORT: 8080
+      CORS_ORIGIN: "*"
+      JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET:-replace_me_access_secret_1234567890}
+      JWT_ISSUER: school-platform
+      JWT_AUDIENCE: school-platform-api
+      REDIS_URL: redis://redis:6379
+      RATE_LIMIT_WINDOW_SECONDS: 60
+      RATE_LIMIT_MAX_REQUESTS: 120
+      AUTH_SERVICE_URL: http://auth-service:3001
+      STUDENT_SERVICE_URL: http://student-service:3002
+      COURSE_SERVICE_URL: http://course-service:3003
+      NOTIFICATION_SERVICE_URL: http://notification-service:3004
+    depends_on:
+      redis:
+        condition: service_healthy
+      auth-service:
+        condition: service_started
+      student-service:
+        condition: service_started
+      course-service:
+        condition: service_started
+    ports:
+      - "8080:8080"
+    networks:
+      - sp-net
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_API_BASE_URL: http://api-gateway:8080
+    container_name: sp-frontend
+    restart: unless-stopped
+    depends_on:
+      api-gateway:
+        condition: service_started
+    ports:
+      - "3000:3000"
+    environment:
+      PORT: 3000
+    networks:
+      - sp-net
+
+networks:
+  sp-net:
+    driver: bridge
+
+volumes:
+  mysql_data:
+
