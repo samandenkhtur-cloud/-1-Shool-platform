@@ -1,3 +1,0 @@
--- Add TEACHER role to User.role enum
-ALTER TABLE `User`
-  MODIFY `role` ENUM('ADMIN', 'TEACHER', 'STUDENT') NOT NULL DEFAULT 'STUDENT';
