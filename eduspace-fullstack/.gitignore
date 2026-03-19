@@ -1,0 +1,35 @@
+# Dependencies
+node_modules/
+*/node_modules/
+
+# Environment
+.env
+*/.env
+backend/.env
+frontend/.env
+
+# Build outputs
+dist/
+build/
+*/dist/
+*/build/
+
+# Uploads (runtime)
+backend/uploads/*
+!backend/uploads/.gitkeep
+
+# Logs
+*.log
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Docker
+*.pid

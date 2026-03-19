@@ -1,0 +1,335 @@
+// ============================================================
+// MOCK DATA — Replace with real API calls when backend is ready
+// ============================================================
+
+export const MOCK_USERS = {
+  student: {
+    id: 'u001',
+    name: 'Alex Morgan',
+    email: 'alex@student.edu',
+    role: 'student',
+    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Alex',
+    enrolledCourses: ['c001', 'c002', 'c004'],
+    joinedAt: '2024-09-01',
+  },
+  teacher: {
+    id: 'u002',
+    name: 'Dr. Sarah Chen',
+    email: 'sarah@teacher.edu',
+    role: 'teacher',
+    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah',
+    teachingCourses: ['c001', 'c003'],
+    joinedAt: '2023-06-15',
+  },
+  admin: {
+    id: 'u003',
+    name: 'James Wilson',
+    email: 'james@admin.edu',
+    role: 'admin',
+    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=James',
+    joinedAt: '2022-01-10',
+  },
+};
+
+export const MOCK_COURSES = [
+  {
+    id: 'c001',
+    title: 'Advanced Mathematics',
+    description: 'Calculus, linear algebra, and statistical methods for engineering students. Covering differential equations and multivariable calculus.',
+    teacher: 'Dr. Sarah Chen',
+    teacherId: 'u002',
+    category: 'Mathematics',
+    level: 'Advanced',
+    thumbnail: 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=400&h=240&fit=crop',
+    lessonsCount: 24,
+    studentsCount: 142,
+    duration: '12 weeks',
+    rating: 4.8,
+    progress: 65,
+    color: '#3a9bff',
+    bgGradient: 'from-blue-500 to-indigo-600',
+    sections: [
+      { id: 's1', title: 'Differential Calculus', lessonIds: ['l001', 'l002', 'l003'] },
+      { id: 's2', title: 'Integral Calculus', lessonIds: ['l004', 'l005', 'l006'] },
+      { id: 's3', title: 'Linear Algebra', lessonIds: ['l007', 'l008'] },
+    ],
+    tags: ['Calculus', 'Algebra', 'Statistics'],
+  },
+  {
+    id: 'c002',
+    title: 'Introduction to Python',
+    description: 'Learn Python from scratch. Variables, loops, functions, OOP, and practical projects for beginners and intermediate learners.',
+    teacher: 'Prof. Mike Torres',
+    teacherId: 'u004',
+    category: 'Programming',
+    level: 'Beginner',
+    thumbnail: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400&h=240&fit=crop',
+    lessonsCount: 32,
+    studentsCount: 389,
+    duration: '8 weeks',
+    rating: 4.9,
+    progress: 40,
+    color: '#10b981',
+    bgGradient: 'from-emerald-500 to-teal-600',
+    sections: [
+      { id: 's4', title: 'Python Basics', lessonIds: ['l009', 'l010', 'l011'] },
+      { id: 's5', title: 'Functions & Modules', lessonIds: ['l012', 'l013'] },
+      { id: 's6', title: 'OOP in Python', lessonIds: ['l014', 'l015', 'l016'] },
+    ],
+    tags: ['Python', 'Programming', 'OOP'],
+  },
+  {
+    id: 'c003',
+    title: 'World History & Culture',
+    description: 'An exploration of world civilizations, major historical events, and cultural developments from ancient times to the modern era.',
+    teacher: 'Dr. Sarah Chen',
+    teacherId: 'u002',
+    category: 'Humanities',
+    level: 'Intermediate',
+    thumbnail: 'https://images.unsplash.com/photo-1447069387593-a5de0862481e?w=400&h=240&fit=crop',
+    lessonsCount: 18,
+    studentsCount: 95,
+    duration: '10 weeks',
+    rating: 4.6,
+    progress: 0,
+    color: '#f59e0b',
+    bgGradient: 'from-amber-500 to-orange-600',
+    sections: [
+      { id: 's7', title: 'Ancient Civilizations', lessonIds: ['l017', 'l018', 'l019'] },
+      { id: 's8', title: 'Medieval Period', lessonIds: ['l020', 'l021'] },
+    ],
+    tags: ['History', 'Culture', 'Civilization'],
+  },
+  {
+    id: 'c004',
+    title: 'Digital Arts & Design',
+    description: 'Explore graphic design principles, color theory, typography, and digital illustration using industry-standard tools.',
+    teacher: 'Prof. Lena Park',
+    teacherId: 'u005',
+    category: 'Arts',
+    level: 'Beginner',
+    thumbnail: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?w=400&h=240&fit=crop',
+    lessonsCount: 20,
+    studentsCount: 211,
+    duration: '6 weeks',
+    rating: 4.7,
+    progress: 80,
+    color: '#7c3aed',
+    bgGradient: 'from-violet-500 to-purple-600',
+    sections: [
+      { id: 's9', title: 'Design Fundamentals', lessonIds: ['l022', 'l023', 'l024'] },
+      { id: 's10', title: 'Digital Illustration', lessonIds: ['l025', 'l026'] },
+    ],
+    tags: ['Design', 'Art', 'Typography'],
+  },
+  {
+    id: 'c005',
+    title: 'Physics: Mechanics & Waves',
+    description: 'Classical mechanics, Newton\'s laws, energy, momentum, oscillations, and wave phenomena with lab simulations.',
+    teacher: 'Dr. Robert Kim',
+    teacherId: 'u006',
+    category: 'Science',
+    level: 'Intermediate',
+    thumbnail: 'https://images.unsplash.com/photo-1636466497217-26a8cbeaf0aa?w=400&h=240&fit=crop',
+    lessonsCount: 28,
+    studentsCount: 176,
+    duration: '14 weeks',
+    rating: 4.5,
+    progress: 0,
+    color: '#ec4899',
+    bgGradient: 'from-pink-500 to-rose-600',
+    sections: [
+      { id: 's11', title: 'Kinematics', lessonIds: ['l027', 'l028', 'l029'] },
+      { id: 's12', title: 'Dynamics', lessonIds: ['l030', 'l031'] },
+    ],
+    tags: ['Physics', 'Mechanics', 'Waves'],
+  },
+  {
+    id: 'c006',
+    title: 'English Literature',
+    description: 'Classic and contemporary literary works, critical analysis, essay writing, and exploring themes in modern literature.',
+    teacher: 'Prof. Emma Davis',
+    teacherId: 'u007',
+    category: 'Languages',
+    level: 'Intermediate',
+    thumbnail: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400&h=240&fit=crop',
+    lessonsCount: 16,
+    studentsCount: 128,
+    duration: '8 weeks',
+    rating: 4.4,
+    progress: 0,
+    color: '#06b6d4',
+    bgGradient: 'from-cyan-500 to-sky-600',
+    sections: [
+      { id: 's13', title: 'Classic Literature', lessonIds: ['l032', 'l033'] },
+      { id: 's14', title: 'Modern Fiction', lessonIds: ['l034', 'l035', 'l036'] },
+    ],
+    tags: ['Literature', 'Writing', 'Analysis'],
+  },
+];
+
+export const MOCK_LESSONS = [
+  { id: 'l001', title: 'Introduction to Derivatives', courseId: 'c001', section: 'Differential Calculus', duration: '45 min', videoId: 'WsQQvHm4lSw', description: 'Learn the fundamental concept of derivatives, the power rule, and basic differentiation techniques.', isCompleted: true, materials: ['lecture-notes-1.pdf', 'exercises-1.pdf'] },
+  { id: 'l002', title: 'Chain Rule & Product Rule', courseId: 'c001', section: 'Differential Calculus', duration: '50 min', videoId: 'H-ybCx8gt-8', description: 'Advanced differentiation rules: chain rule, product rule, and quotient rule with examples.', isCompleted: true, materials: ['lecture-notes-2.pdf'] },
+  { id: 'l003', title: 'Applications of Derivatives', courseId: 'c001', section: 'Differential Calculus', duration: '55 min', videoId: 'rAof9Ld5sOg', description: 'Optimization problems, related rates, and curve sketching using derivatives.', isCompleted: false, materials: ['lecture-notes-3.pdf', 'problem-set-1.pdf'] },
+  { id: 'l004', title: 'Definite & Indefinite Integrals', courseId: 'c001', section: 'Integral Calculus', duration: '48 min', videoId: 'rfG8ce4nNh0', description: 'Understanding antiderivatives, the fundamental theorem of calculus, and basic integration rules.', isCompleted: false, materials: ['integral-notes.pdf'] },
+  { id: 'l005', title: 'Integration by Parts', courseId: 'c001', section: 'Integral Calculus', duration: '42 min', videoId: 'JKVSBaFNqE4', description: 'The integration by parts technique for complex integrals.', isCompleted: false, materials: [] },
+  { id: 'l006', title: 'Partial Fractions', courseId: 'c001', section: 'Integral Calculus', duration: '38 min', videoId: 'dFJOlo8POJQ', description: 'Decomposing rational functions into partial fractions for integration.', isCompleted: false, materials: [] },
+  { id: 'l009', title: 'Python Variables & Data Types', courseId: 'c002', section: 'Python Basics', duration: '35 min', videoId: 'Z1Yd7upQIl0', description: 'Introduction to Python variables, data types, and basic operations.', isCompleted: true, materials: ['python-intro.pdf'] },
+  { id: 'l010', title: 'Control Flow & Loops', courseId: 'c002', section: 'Python Basics', duration: '40 min', videoId: 'eSttygYX7aU', description: 'if/else statements, for loops, while loops, and conditional expressions.', isCompleted: true, materials: [] },
+  { id: 'l011', title: 'Lists, Tuples & Dictionaries', courseId: 'c002', section: 'Python Basics', duration: '50 min', videoId: 'W8KRzm-HUcc', description: 'Python collection data types and their methods.', isCompleted: false, materials: ['collections-ref.pdf'] },
+  { id: 'l022', title: 'Color Theory Basics', courseId: 'c004', section: 'Design Fundamentals', duration: '32 min', videoId: 'AvgCkHrcj8w', description: 'The color wheel, complementary colors, and color psychology in design.', isCompleted: true, materials: ['color-guide.pdf'] },
+  { id: 'l023', title: 'Typography Fundamentals', courseId: 'c004', section: 'Design Fundamentals', duration: '38 min', videoId: 'RXlLMFacuHA', description: 'Font families, hierarchy, readability, and pairing principles.', isCompleted: true, materials: [] },
+  { id: 'l024', title: 'Layout & Composition', courseId: 'c004', section: 'Design Fundamentals', duration: '44 min', videoId: 'a5KYlHNKQB8', description: 'Rule of thirds, grid systems, and visual balance in design.', isCompleted: true, materials: ['layout-exercises.pdf'] },
+  { id: 'l025', title: 'Digital Illustration Tools', courseId: 'c004', section: 'Digital Illustration', duration: '52 min', videoId: 'Bp0mNDllCkA', description: 'Getting started with digital illustration software and brush techniques.', isCompleted: true, materials: [] },
+  { id: 'l026', title: 'Creating Vector Art', courseId: 'c004', section: 'Digital Illustration', duration: '58 min', videoId: 'MrFoTmPuQ8o', description: 'Vector paths, shapes, and creating professional illustrations.', isCompleted: false, materials: [] },
+];
+
+export const MOCK_LESSONS_TABLE = [
+  { id: 'lt001', course: 'Advanced Mathematics', teacher: 'Dr. Sarah Chen', members: 142, date: '2024-03-12', material: 'lecture-notes.pdf', status: 'done', courseId: 'c001', lessonId: 'l001' },
+  { id: 'lt002', course: 'Introduction to Python', teacher: 'Prof. Mike Torres', members: 389, date: '2024-03-13', material: 'python-basics.pdf', status: 'done', courseId: 'c002', lessonId: 'l009' },
+  { id: 'lt003', course: 'Digital Arts & Design', teacher: 'Prof. Lena Park', members: 211, date: '2024-03-14', material: null, status: 'done', courseId: 'c004', lessonId: 'l022' },
+  { id: 'lt004', course: 'World History & Culture', teacher: 'Dr. Sarah Chen', members: 95, date: '2024-03-15', material: 'history-notes.pdf', status: 'pending', courseId: 'c003', lessonId: 'l017' },
+  { id: 'lt005', course: 'Physics: Mechanics', teacher: 'Dr. Robert Kim', members: 176, date: '2024-03-18', material: 'mechanics-lab.pdf', status: 'pending', courseId: 'c005', lessonId: 'l027' },
+  { id: 'lt006', course: 'English Literature', teacher: 'Prof. Emma Davis', members: 128, date: '2024-03-20', material: null, status: 'pending', courseId: 'c006', lessonId: 'l032' },
+];
+
+export const MOCK_NOTIFICATIONS = [
+  { id: 'n1', type: 'enrollment', title: 'Enrollment Confirmed', message: 'You\'ve been enrolled in Advanced Mathematics.', time: '2 min ago', read: false },
+  { id: 'n2', type: 'lesson', title: 'New Lesson Available', message: 'Integration by Parts is now live in Advanced Mathematics.', time: '1 hour ago', read: false },
+  { id: 'n3', type: 'reminder', title: 'Assignment Due Tomorrow', message: 'Python Functions problem set is due March 19.', time: '3 hours ago', read: true },
+  { id: 'n4', type: 'grade', title: 'Grade Posted', message: 'Your Digital Arts midterm has been graded: 92/100.', time: '1 day ago', read: true },
+  { id: 'n5', type: 'enrollment', title: 'New Student Enrolled', message: 'Priya Sharma joined your Advanced Mathematics course.', time: '2 days ago', read: true },
+];
+
+export const MOCK_REMINDERS = [
+  { id: 'r1', title: 'Python Assignment', time: '3:00 PM', date: 'Today', color: 'bg-emerald-400' },
+  { id: 'r2', title: 'Math Quiz', time: '10:00 AM', date: 'Tomorrow', color: 'bg-brand-400' },
+  { id: 'r3', title: 'Design Project Due', time: '11:59 PM', date: 'Mar 20', color: 'bg-violet-400' },
+  { id: 'r4', title: 'Physics Lab Report', time: '2:00 PM', date: 'Mar 21', color: 'bg-amber-400' },
+];
+
+export const MOCK_PROGRESS = {
+  'c001': { courseId: 'c001', completedLessons: 2, totalLessons: 24, percentage: 65 },
+  'c002': { courseId: 'c002', completedLessons: 2, totalLessons: 32, percentage: 40 },
+  'c004': { courseId: 'c004', completedLessons: 4, totalLessons: 20, percentage: 80 },
+};
+
+export const MOCK_STATS = {
+  student: {
+    enrolledCourses: 3,
+    completedLessons: 18,
+    hoursLearned: 24,
+    streak: 7,
+  },
+  teacher: {
+    activeCourses: 2,
+    totalStudents: 237,
+    lessonsCreated: 42,
+    avgRating: 4.7,
+  },
+  admin: {
+    totalCourses: 6,
+    totalStudents: 1141,
+    totalTeachers: 5,
+    activeEnrollments: 284,
+  },
+};
+
+// ── LIVE SESSIONS ──────────────────────────────────────────
+export const MOCK_LIVE_SESSIONS = [
+  {
+    id: 'ls001', title: 'Derivatives Deep Dive — Q&A Session',
+    courseId: 'c001', courseName: 'Advanced Mathematics',
+    teacher: 'Dr. Sarah Chen', teacherId: 'u002',
+    scheduledAt: new Date(Date.now() + 1000 * 60 * 30).toISOString(), // 30 min from now
+    duration: 60, status: 'live',
+    youtubeStreamId: 'jNQXAC9IVRw',
+    attendees: 38, maxAttendees: 100,
+    description: 'Live problem-solving session on differential calculus. Bring your questions!',
+    thumbnail: 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=400&h=240&fit=crop',
+  },
+  {
+    id: 'ls002', title: 'Python OOP Workshop',
+    courseId: 'c002', courseName: 'Introduction to Python',
+    teacher: 'Prof. Mike Torres', teacherId: 'u004',
+    scheduledAt: new Date(Date.now() + 1000 * 60 * 60 * 3).toISOString(),
+    duration: 90, status: 'upcoming',
+    youtubeStreamId: null,
+    attendees: 0, maxAttendees: 80,
+    description: 'Hands-on workshop covering classes, inheritance, and design patterns.',
+    thumbnail: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400&h=240&fit=crop',
+  },
+  {
+    id: 'ls003', title: 'Design Critique: Student Portfolios',
+    courseId: 'c004', courseName: 'Digital Arts & Design',
+    teacher: 'Prof. Lena Park', teacherId: 'u005',
+    scheduledAt: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(),
+    duration: 75, status: 'ended',
+    youtubeStreamId: 'WsQQvHm4lSw',
+    attendees: 52, maxAttendees: 60,
+    description: 'Review and feedback session on student design projects from Week 4.',
+    thumbnail: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?w=400&h=240&fit=crop',
+  },
+  {
+    id: 'ls004', title: 'Historical Debate: Causes of WWI',
+    courseId: 'c003', courseName: 'World History & Culture',
+    teacher: 'Dr. Sarah Chen', teacherId: 'u002',
+    scheduledAt: new Date(Date.now() + 1000 * 60 * 60 * 24).toISOString(),
+    duration: 60, status: 'upcoming',
+    youtubeStreamId: null,
+    attendees: 0, maxAttendees: 50,
+    description: 'Interactive debate and discussion on the origins of World War I.',
+    thumbnail: 'https://images.unsplash.com/photo-1447069387593-a5de0862481e?w=400&h=240&fit=crop',
+  },
+];
+
+// ── STUDENTS (for admin/teacher) ───────────────────────────
+export const MOCK_STUDENTS = [
+  { id: 'st001', name: 'Alex Morgan',    email: 'alex@student.edu',   avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Alex',   enrolledCourses: ['c001','c002','c004'], progress: { c001:65, c002:40, c004:80 }, joinedAt: '2024-09-01', status: 'active',   lastActive: '2 hours ago' },
+  { id: 'st002', name: 'Priya Sharma',   email: 'priya@student.edu',  avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Priya',  enrolledCourses: ['c001','c003'],        progress: { c001:90, c003:55 },         joinedAt: '2024-09-03', status: 'active',   lastActive: '1 day ago' },
+  { id: 'st003', name: 'Carlos Rivera',  email: 'carlos@student.edu', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Carlos', enrolledCourses: ['c002','c005'],        progress: { c002:20, c005:10 },         joinedAt: '2024-09-10', status: 'active',   lastActive: '3 days ago' },
+  { id: 'st004', name: 'Emma Johnson',   email: 'emma@student.edu',   avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Emma',   enrolledCourses: ['c004','c006'],        progress: { c004:100, c006:75 },        joinedAt: '2024-09-01', status: 'active',   lastActive: '5 hours ago' },
+  { id: 'st005', name: 'Liu Wei',        email: 'liu@student.edu',    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Liu',    enrolledCourses: ['c001','c002','c003'], progress: { c001:30, c002:85, c003:20 },joinedAt: '2024-09-15', status: 'active',   lastActive: 'Just now' },
+  { id: 'st006', name: 'Sofia Martinez', email: 'sofia@student.edu',  avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Sofia',  enrolledCourses: ['c005'],               progress: { c005:45 },                  joinedAt: '2024-10-01', status: 'inactive', lastActive: '2 weeks ago' },
+  { id: 'st007', name: 'James Lee',      email: 'jlee@student.edu',   avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=JLee',   enrolledCourses: ['c002','c004'],        progress: { c002:60, c004:35 },         joinedAt: '2024-09-20', status: 'active',   lastActive: '1 hour ago' },
+  { id: 'st008', name: 'Aisha Patel',    email: 'aisha@student.edu',  avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Aisha',  enrolledCourses: ['c001','c006'],        progress: { c001:50, c006:90 },         joinedAt: '2024-09-05', status: 'active',   lastActive: '4 hours ago' },
+];
+
+// ── ANALYTICS DATA ─────────────────────────────────────────
+export const MOCK_ANALYTICS = {
+  enrollmentsByMonth: [
+    { month: 'Sep', enrollments: 48, completions: 5  },
+    { month: 'Oct', enrollments: 72, completions: 18 },
+    { month: 'Nov', enrollments: 65, completions: 22 },
+    { month: 'Dec', enrollments: 40, completions: 31 },
+    { month: 'Jan', enrollments: 90, completions: 28 },
+    { month: 'Feb', enrollments: 110, completions: 42 },
+    { month: 'Mar', enrollments: 95, completions: 38 },
+  ],
+  courseEngagement: [
+    { name: 'Adv. Mathematics', students: 142, completion: 68, rating: 4.8 },
+    { name: 'Python',           students: 389, completion: 55, rating: 4.9 },
+    { name: 'World History',    students: 95,  completion: 72, rating: 4.6 },
+    { name: 'Digital Arts',     students: 211, completion: 81, rating: 4.7 },
+    { name: 'Physics',          students: 176, completion: 42, rating: 4.5 },
+    { name: 'English Lit',      students: 128, completion: 60, rating: 4.4 },
+  ],
+  platformStats: {
+    totalRevenue: '$24,800',
+    activeUsers: 842,
+    avgSessionTime: '42 min',
+    completionRate: '64%',
+    newStudentsThisMonth: 95,
+    totalCertificates: 184,
+  },
+  weeklyActivity: [
+    { day: 'Mon', lessons: 38, quizzes: 14 },
+    { day: 'Tue', lessons: 52, quizzes: 21 },
+    { day: 'Wed', lessons: 45, quizzes: 18 },
+    { day: 'Thu', lessons: 61, quizzes: 24 },
+    { day: 'Fri', lessons: 49, quizzes: 20 },
+    { day: 'Sat', lessons: 22, quizzes: 8  },
+    { day: 'Sun', lessons: 15, quizzes: 5  },
+  ],
+};
