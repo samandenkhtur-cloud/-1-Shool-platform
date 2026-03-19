@@ -21,6 +21,7 @@
     --text-main: #0f172a;
     --text-muted: #64748b;
     --border-col: #e8edf5;
+    --border: #e8edf5;
   }
 
   /* ── Dark mode ── */
@@ -38,6 +39,7 @@
     --text-main: #e2e8f0;
     --text-muted: #94a3b8;
     --border-col: rgba(255,255,255,0.08);
+    --border: rgba(255,255,255,0.08);
     color-scheme: dark;
   }
 
