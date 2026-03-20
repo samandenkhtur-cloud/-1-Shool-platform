@@ -82,7 +82,7 @@ lessonRouter.post('/:id/materials',      authenticate, authorize('teacher','admi
 // ═══════════════════════════════════════════
 const userRouter = require('express').Router();
 
-userRouter.get('/',              authenticate, authorize('admin'), getUsers);
+userRouter.get('/',              authenticate, authorize('teacher','admin'), getUsers);
 userRouter.get('/stats',         authenticate, getStudentStats);
 userRouter.get('/:id',           authenticate, authorize('teacher','admin'), getUser);
 userRouter.patch('/:id/status',  authenticate, authorize('admin'), updateUserStatus);
@@ -104,7 +104,7 @@ notifRouter.patch('/read-all',   authenticate, markAllRead);
 // ═══════════════════════════════════════════
 const analyticsRouter = require('express').Router();
 
-analyticsRouter.get('/platform',    authenticate, authorize('admin'), getPlatformStats);
+analyticsRouter.get('/platform',    authenticate, authorize('teacher','admin'), getPlatformStats);
 analyticsRouter.get('/engagement',  authenticate, authorize('teacher','admin'), getCourseEngagement);
 analyticsRouter.get('/enrollments', authenticate, authorize('teacher','admin'), getEnrollmentTrend);
 

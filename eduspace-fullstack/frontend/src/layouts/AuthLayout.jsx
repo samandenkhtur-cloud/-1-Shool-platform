@@ -1,6 +1,6 @@
 import { Outlet, Navigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
-import { GraduationCap } from 'lucide-react';
+import logo from '../assets/eduzenith-logo.svg';
 
 export function AuthLayout() {
   const { user } = useAuth();
@@ -17,15 +17,15 @@ export function AuthLayout() {
         <div className="relative z-10">
           <div className="flex items-center gap-3 mb-14">
             <div className="w-10 h-10 bg-white/15 rounded-2xl flex items-center justify-center backdrop-blur-sm border border-white/10">
-              <GraduationCap className="w-5 h-5 text-white" />
+              <img src={logo} alt="EduZenith logo" className="w-7 h-7 object-contain" />
             </div>
-            <span className="font-display font-bold text-white text-xl">EduSpace</span>
+            <span className="font-display font-bold text-white text-xl">EduZenith</span>
           </div>
           <h1 className="font-display font-bold text-white text-4xl leading-tight mb-5">
             Learn without<br />limits. Grow<br />without bounds.
           </h1>
           <p className="text-brand-200 text-sm leading-relaxed max-w-xs">
-            Join thousands of students and teachers on EduSpace — a modern platform built for real learning.
+            Join thousands of students and teachers on EduZenith — a modern platform built for real learning.
           </p>
         </div>
         <div className="relative z-10 grid grid-cols-2 gap-3">

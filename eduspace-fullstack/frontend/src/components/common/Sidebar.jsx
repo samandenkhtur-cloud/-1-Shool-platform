@@ -1,7 +1,7 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard, BookOpen, Library,
-  GraduationCap, Settings, LogOut, Users, BarChart3,
+  Settings, LogOut, Users, BarChart3,
   ChevronLeft, ChevronRight, PlusCircle, ShieldCheck,
 } from 'lucide-react';
 import { cn } from '../../lib/utils';
@@ -9,6 +9,7 @@ import { useAuth } from '../../hooks/useAuth';
 import { useLocale } from '../../hooks/useLocale';
 import { Avatar } from '../ui/Avatar';
 import toast from 'react-hot-toast';
+import logo from '../../assets/eduzenith-logo.svg';
 
 export function Sidebar({ collapsed, onToggle }) {
   const { user, logout } = useAuth();
@@ -60,11 +61,11 @@ export function Sidebar({ collapsed, onToggle }) {
         style={{ borderBottom: '1px solid var(--border-col)' }}
       >
         <div className="w-8 h-8 bg-brand-600 rounded-xl flex items-center justify-center flex-shrink-0 shadow-brand">
-          <GraduationCap className="w-4 h-4 text-white" />
+          <img src={logo} alt="EduZenith logo" className="w-5 h-5 object-contain" />
         </div>
         {!collapsed && (
           <div className="animate-fade-in min-w-0">
-            <p className="font-display font-bold text-base leading-none" style={{ color: 'var(--text-main)' }}>EduSpace</p>
+            <p className="font-display font-bold text-base leading-none" style={{ color: 'var(--text-main)' }}>EduZenith</p>
             <p className="text-[10px] mt-0.5 font-semibold uppercase tracking-widest" style={{ color: 'var(--text-muted)' }}>Platform</p>
           </div>
         )}

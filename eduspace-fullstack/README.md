@@ -126,6 +126,9 @@ All use password: `password`
 | Student | alex@student.edu      |
 | Teacher | sarah@teacher.edu     |
 | Admin   | james@admin.edu       |
+| Teacher | Helen@admin.edu       |
+| Teacher | Goo@admin.edu         |
+| Teacher | Sanex@admin.edu       |
 
 ---
 

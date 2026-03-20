@@ -1,4 +1,4 @@
--- EduSpace initial DB setup
+-- EduZenith initial DB setup
 -- This runs once when the MySQL Docker container is first created
 
 CREATE DATABASE IF NOT EXISTS eduspace_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;

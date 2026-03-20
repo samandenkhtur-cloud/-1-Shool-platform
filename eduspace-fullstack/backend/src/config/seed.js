@@ -18,15 +18,19 @@ async function seed() {
   const pw = await bcrypt.hash('password', 12);
 
   const admin = await User.create({
-    name: 'James Wilson', email: 'james@admin.edu',
+    name: 'Amka', email: 'amka@admin.edu',
     password: pw, role: 'admin', isVerified: true, isActive: true,
   });
   const teacher1 = await User.create({
-    name: 'Dr. Sarah Chen', email: 'sarah@teacher.edu',
+    name: 'Helen', email: 'helen@teacher.edu',
     password: pw, role: 'teacher', isVerified: true, isActive: true,
   });
   const teacher2 = await User.create({
-    name: 'Prof. Mike Torres', email: 'mike@teacher.edu',
+    name: 'Goo', email: 'goo@teacher.edu',
+    password: pw, role: 'teacher', isVerified: true, isActive: true,
+  });
+  const teacher3 = await User.create({
+    name: 'Sanex', email: 'sanex@teacher.edu',
     password: pw, role: 'teacher', isVerified: true, isActive: true,
   });
   const student = await User.create({

@@ -41,7 +41,7 @@ app.use('/uploads', express.static(uploadsDir));
 app.get('/health', (req, res) => {
   res.json({
     status:  'ok',
-    service: 'EduSpace API',
+    service: 'EduZenith API',
     version: '1.0.0',
     time:    new Date().toISOString(),
   });
@@ -74,7 +74,7 @@ app.use((err, req, res, next) => {
 (async () => {
   await connectDB();
   app.listen(PORT, () => {
-    console.log(`\n🚀 EduSpace API running on http://localhost:${PORT}`);
+    console.log(`\n🚀 EduZenith API running on http://localhost:${PORT}`);
     console.log(`📋 Health: http://localhost:${PORT}/health`);
     console.log(`🌍 Env: ${process.env.NODE_ENV || 'development'}\n`);
   });

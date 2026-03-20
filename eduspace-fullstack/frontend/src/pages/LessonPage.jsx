@@ -30,7 +30,6 @@ export function LessonPage() {
   };
 
   const videoId = getVideoId(lesson);
-  const apiBase = (import.meta.env.VITE_API_URL || 'http://localhost:4000/api').replace(/\/api\/?$/, '');
   const getFileTypeLabel = (name, url) => {
     const source = name || url || '';
     const match = source.match(/\.([A-Za-z0-9]+)(?:\?|#|$)/);
@@ -131,7 +130,7 @@ export function LessonPage() {
                   {lesson.materials.map((m, idx) => {
                     const name = typeof m === 'string' ? m : m?.name;
                     const fileUrl = typeof m === 'string' ? null : m?.fileUrl;
-                    const href = fileUrl ? `${apiBase}${fileUrl}` : null;
+                    const href = fileUrl || null;
                     const fileType = getFileTypeLabel(name, fileUrl);
                     const fileTypeStyle = getFileTypeStyle(fileType);
                     return href ? (

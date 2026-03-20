@@ -48,6 +48,7 @@ export function StudentsPage() {
     <StudentDetail
       student={selectedStudent}
       isAdmin={isAdmin}
+      isTeacher={user?.role === 'teacher'}
       startInEdit={editStart}
       onBack={() => { setSelected(null); setEditStart(false); }}
       onSave={async (payload) => {

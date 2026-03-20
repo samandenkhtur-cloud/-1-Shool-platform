@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Eye, EyeOff, Loader2, GraduationCap, Check } from 'lucide-react';
+import { Eye, EyeOff, Loader2, Check } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { cn } from '../lib/utils';
 import toast from 'react-hot-toast';
+import logo from '../assets/eduzenith-logo.svg';
 
 const ROLES = [
   { value: 'student', label: 'Student', desc: 'Enroll in courses and track progress' },
@@ -37,7 +38,7 @@ export function RegisterPage() {
     setLoading(true);
     try {
       await register({ name: form.name, email: form.email, password: form.password, role: form.role });
-      toast.success('Account created! Welcome to EduSpace 🎓');
+      toast.success('Account created! Welcome to EduZenith 🎓');
       navigate('/dashboard');
     } catch (err) {
       toast.error(err.message || 'Registration failed');
@@ -60,12 +61,12 @@ export function RegisterPage() {
       <div className="mb-8">
         <div className="flex items-center gap-2 mb-6 lg:hidden">
           <div className="w-8 h-8 bg-brand-600 rounded-xl flex items-center justify-center">
-            <GraduationCap className="w-4 h-4 text-white" />
+            <img src={logo} alt="EduZenith logo" className="w-5 h-5 object-contain" />
           </div>
-          <span className="font-display font-bold text-lg" style={{ color: 'var(--text-main)' }}>EduSpace</span>
+          <span className="font-display font-bold text-lg" style={{ color: 'var(--text-main)' }}>EduZenith</span>
         </div>
         <h1 className="font-display font-bold text-2xl mb-1" style={{ color: 'var(--text-main)' }}>Create your account</h1>
-        <p className="text-sm" style={{ color: 'var(--text-muted)' }}>Join thousands of learners on EduSpace</p>
+        <p className="text-sm" style={{ color: 'var(--text-muted)' }}>Join thousands of learners on EduZenith</p>
       </div>
 
       <div className="grid grid-cols-2 gap-3 mb-6">

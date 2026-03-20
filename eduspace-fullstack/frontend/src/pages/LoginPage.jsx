@@ -1,14 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Eye, EyeOff, Loader2, GraduationCap } from 'lucide-react';
+import { Eye, EyeOff, Loader2 } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { cn } from '../lib/utils';
 import toast from 'react-hot-toast';
+import logo from '../assets/eduzenith-logo.svg';
 
 const DEMOS = [
   { role: 'student', email: 'alex@student.edu',  label: 'Student' },
-  { role: 'teacher', email: 'sarah@teacher.edu', label: 'Teacher' },
-  { role: 'admin',   email: 'james@admin.edu',   label: 'Admin' },
+  { role: 'teacher', email: 'helen@teacher.edu', label: 'Teacher' },
+  { role: 'admin',   email: 'amka@admin.edu',   label: 'Admin' },
 ];
 
 export function LoginPage() {
@@ -92,9 +93,9 @@ export function LoginPage() {
       <div className="mb-8">
         <div className="flex items-center gap-2 mb-6 lg:hidden">
           <div className="w-8 h-8 bg-brand-600 rounded-xl flex items-center justify-center">
-            <GraduationCap className="w-4 h-4 text-white" />
+            <img src={logo} alt="EduZenith logo" className="w-5 h-5 object-contain" />
           </div>
-          <span className="font-display font-bold text-lg" style={{ color: 'var(--text-main)' }}>EduSpace</span>
+          <span className="font-display font-bold text-lg" style={{ color: 'var(--text-main)' }}>EduZenith</span>
         </div>
         <h1 className="font-display font-bold text-2xl mb-1" style={{ color: 'var(--text-main)' }}>Welcome back</h1>
         <p className="text-sm" style={{ color: 'var(--text-muted)' }}>Sign in to your account to continue learning</p>

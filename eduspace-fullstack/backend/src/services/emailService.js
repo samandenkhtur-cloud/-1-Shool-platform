@@ -10,7 +10,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-const FROM = `"${process.env.GMAIL_FROM_NAME || 'EduSpace'}" <${process.env.GMAIL_USER}>`;
+const FROM = `"${process.env.GMAIL_FROM_NAME || 'EduZenith'}" <${process.env.GMAIL_USER}>`;
 const APP_URL = process.env.APP_URL || 'http://localhost:4000';
 const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173';
 
@@ -41,12 +41,12 @@ const htmlWrap = (content) => `
 <body>
   <div class="wrap">
     <div class="header">
-      <h1>🎓 EduSpace</h1>
+      <h1>🎓 EduZenith</h1>
       <p>Smart Learning Platform</p>
     </div>
     <div class="body">${content}</div>
     <div class="footer">
-      © ${new Date().getFullYear()} EduSpace. Бүх эрх хуулиар хамгаалагдсан.<br>
+      © ${new Date().getFullYear()} EduZenith. Бүх эрх хуулиар хамгаалагдсан.<br>
       <a href="${FRONTEND_URL}" style="color:#005dce">eduspace.mn</a>
     </div>
   </div>
@@ -63,10 +63,10 @@ const sendVerificationEmail = async (user, token) => {
   await transporter.sendMail({
     from: FROM,
     to:   user.email,
-    subject: '✅ EduSpace — И-мэйл хаягаа баталгаажуулна уу',
+    subject: '✅ EduZenith — И-мэйл хаягаа баталгаажуулна уу',
     html: htmlWrap(`
       <h2>Тавтай морил, ${user.name}! 👋</h2>
-      <p>EduSpace-д бүртгэгдсэн танд баяр хүргэж байна. Та доорх товчийг дарж и-мэйл хаягаа баталгаажуулна уу.</p>
+      <p>EduZenith-д бүртгэгдсэн танд баяр хүргэж байна. Та доорх товчийг дарж и-мэйл хаягаа баталгаажуулна уу.</p>
       <div style="text-align:center">
         <a href="${url}" class="btn">И-мэйл баталгаажуулах →</a>
       </div>
@@ -86,7 +86,7 @@ const sendPasswordResetEmail = async (user, token) => {
   await transporter.sendMail({
     from: FROM,
     to:   user.email,
-    subject: '🔐 EduSpace — Нууц үг сэргээх',
+    subject: '🔐 EduZenith — Нууц үг сэргээх',
     html: htmlWrap(`
       <h2>Нууц үг сэргээх</h2>
       <p>Та <strong>${user.email}</strong> хаягаар нууц үг сэргээх хүсэлт гаргасан байна.</p>
@@ -107,13 +107,13 @@ const sendEnrollmentEmail = async (user, course) => {
   await transporter.sendMail({
     from: FROM,
     to:   user.email,
-    subject: `🎓 EduSpace — "${course.title}" хичээлд бүртгэгдлээ`,
+    subject: `🎓 EduZenith — "${course.title}" хичээлд бүртгэгдлээ`,
     html: htmlWrap(`
       <h2>Бүртгэл амжилттай! 🎉</h2>
       <p>Та <strong>${course.title}</strong> хичээлд амжилттай бүртгэгдлээ.</p>
       <table style="width:100%;background:#f8fafc;border-radius:10px;padding:16px;margin:16px 0;border-collapse:collapse">
         <tr><td style="padding:6px 0;color:#64748b;font-size:13px">📚 Хичээл</td><td style="font-weight:700;font-size:13px">${course.title}</td></tr>
-        <tr><td style="padding:6px 0;color:#64748b;font-size:13px">👨‍🏫 Багш</td><td style="font-size:13px">${course.teacher?.name || 'EduSpace'}</td></tr>
+        <tr><td style="padding:6px 0;color:#64748b;font-size:13px">👨‍🏫 Багш</td><td style="font-size:13px">${course.teacher?.name || 'EduZenith'}</td></tr>
         <tr><td style="padding:6px 0;color:#64748b;font-size:13px">📋 Категори</td><td style="font-size:13px">${course.category}</td></tr>
         <tr><td style="padding:6px 0;color:#64748b;font-size:13px">🏆 Түвшин</td><td style="font-size:13px">${course.level}</td></tr>
       </table>
@@ -131,12 +131,12 @@ const sendWelcomeEmail = async (user) => {
   await transporter.sendMail({
     from: FROM,
     to:   user.email,
-    subject: '🎓 EduSpace-д тавтай морил!',
+    subject: '🎓 EduZenith-д тавтай морил!',
     html: htmlWrap(`
       <h2>Сайн байна уу, ${user.name}! 👋</h2>
-      <p>EduSpace-д амжилттай бүртгэгдлээ. Та одоо хичээлүүдийг үзэж, суралцах аяллаа эхлүүлж болно.</p>
+      <p>EduZenith-д амжилттай бүртгэгдлээ. Та одоо хичээлүүдийг үзэж, суралцах аяллаа эхлүүлж болно.</p>
       <div style="background:#f0f7ff;border-radius:10px;padding:20px;margin:16px 0">
-        <p style="margin:0 0 8px;font-weight:700;color:#005dce">EduSpace дээр та:</p>
+        <p style="margin:0 0 8px;font-weight:700;color:#005dce">EduZenith дээр та:</p>
         <p style="margin:4px 0;font-size:13px">📚 500+ хичээлд нэвтрэх</p>
         <p style="margin:4px 0;font-size:13px">📡 Шууд хичээлд оролцох</p>
         <p style="margin:4px 0;font-size:13px">📊 Ахиц дэвшлээ хянах</p>
@@ -157,7 +157,7 @@ const sendLiveSessionReminder = async (user, session) => {
   await transporter.sendMail({
     from: FROM,
     to:   user.email,
-    subject: `📡 EduSpace — Шууд хичээл: "${session.title}"`,
+    subject: `📡 EduZenith — Шууд хичээл: "${session.title}"`,
     html: htmlWrap(`
       <h2>Шууд хичээлийн сануулга 📡</h2>
       <p><strong>${session.title}</strong> шууд хичээл тун удахгүй эхлэх гэж байна.</p>

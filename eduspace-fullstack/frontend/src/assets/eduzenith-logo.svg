@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="EduZenith logo">
+  <rect width="256" height="256" rx="40" fill="#ffffff"/>
+  <polygon
+    points="190,25 198,52 226,60 198,68 190,95 182,68 154,60 182,52"
+    fill="#f4b437"
+  />
+  <text
+    x="36"
+    y="178"
+    font-family="Poppins, Montserrat, Arial, sans-serif"
+    font-size="140"
+    font-weight="800"
+    letter-spacing="4"
+    fill="#1e2345"
+  >
+    EZ
+  </text>
+</svg>
