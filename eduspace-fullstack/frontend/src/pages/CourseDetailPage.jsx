@@ -1,7 +1,7 @@
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft, BookOpen, Users, Clock, Star, ChevronDown, ChevronRight, PlayCircle, CheckCircle2, Lock, Download, Tag } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import { useCourse, useLessons, useProgress, useEnrollCourse, useCreateLesson, useUploadLessonMaterial } from '../hooks/useData';
+import { useCourse, useLessons, useProgress, useEnrollCourse, useCreateLesson, useUploadLessonMaterial, useUpdateCourse } from '../hooks/useData';
 import { useAuth } from '../hooks/useAuth';
 import { Avatar } from '../components/ui/Avatar';
 import { Badge } from '../components/ui/Badge';
@@ -24,13 +24,22 @@ export function CourseDetailPage() {
   const enrollMutation = useEnrollCourse();
   const createLessonMutation = useCreateLesson();
   const uploadMaterialMutation = useUploadLessonMaterial();
+  const updateCourseMutation = useUpdateCourse();
 
   const [isAddLessonOpen, setIsAddLessonOpen] = useState(false);
+  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [editData, setEditData] = useState({
+    title: '', description: '', category: '', level: '', duration: '',
+  });
+  const [thumbnailFile, setThumbnailFile] = useState(null);
+  const [thumbnailPreview, setThumbnailPreview] = useState('');
+  const [removeThumb, setRemoveThumb] = useState(false);
   const [newLessonData, setNewLessonData] = useState({
     title: '', sectionId: course?.sections?.[0]?.id || '', duration: '', videoId: '', description: '', pptFile: null,
   });
   const [creatingLesson, setCreatingLesson] = useState(false);
 
+  const canEditCourse = !!user && (user.role === 'admin' || user.id === course?.teacherId);
   const isTeachingCourse = !!user; // allow both teachers and students to add lessons in this dev mode (as requested)
 
 
@@ -38,6 +47,20 @@ export function CourseDetailPage() {
     if (course?.sections?.length) {
       setNewLessonData((prev) => ({ ...prev, sectionId: course.sections[0].id }));
     }
+  }, [course]);
+
+  useEffect(() => {
+    if (!course) return;
+    setEditData({
+      title: course.title || '',
+      description: course.description || '',
+      category: course.category || '',
+      level: course.level || '',
+      duration: course.duration || '',
+    });
+    setThumbnailPreview(course.thumbnail || '');
+    setThumbnailFile(null);
+    setRemoveThumb(false);
   }, [course]);
 
   const resetNewLesson = () => {
@@ -74,6 +97,23 @@ export function CourseDetailPage() {
       toast.error('Failed to add lesson');
     } finally {
       setCreatingLesson(false);
+    }
+  };
+
+  const handleUpdateCourse = async () => {
+    try {
+      await updateCourseMutation.mutateAsync({
+        id,
+        data: {
+          ...editData,
+          thumbnail: thumbnailFile || undefined,
+          removeThumbnail: removeThumb,
+        },
+      });
+      toast.success('Course updated');
+      setIsEditOpen(false);
+    } catch {
+      toast.error('Failed to update course');
     }
   };
 
@@ -142,13 +182,105 @@ export function CourseDetailPage() {
                 <div className="card p-5">
                   <div className="flex items-center justify-between mb-3">
                     <h3 className="font-semibold text-sm" style={{ color: 'var(--text-main)' }}>Instructor tools</h3>
-                    <button
-                      onClick={() => setIsAddLessonOpen((v) => !v)}
-                      className="btn-secondary text-xs px-3 py-1"
-                    >
-                      {isAddLessonOpen ? 'Cancel' : 'Add Lesson'}
-                    </button>
+                    <div className="flex items-center gap-2">
+                      {canEditCourse && (
+                        <button
+                          onClick={() => setIsEditOpen((v) => !v)}
+                          className="btn-secondary text-xs px-3 py-1"
+                        >
+                          {isEditOpen ? 'Close Edit' : 'Edit Course'}
+                        </button>
+                      )}
+                      <button
+                        onClick={() => setIsAddLessonOpen((v) => !v)}
+                        className="btn-secondary text-xs px-3 py-1"
+                      >
+                        {isAddLessonOpen ? 'Cancel' : 'Add Lesson'}
+                      </button>
+                    </div>
                   </div>
+
+                  {canEditCourse && isEditOpen && (
+                    <div className="space-y-3 mb-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <input
+                          value={editData.title}
+                          onChange={(e) => setEditData((v) => ({ ...v, title: e.target.value }))}
+                          className="input-field"
+                          placeholder="Course title"
+                        />
+                        <input
+                          value={editData.duration}
+                          onChange={(e) => setEditData((v) => ({ ...v, duration: e.target.value }))}
+                          className="input-field"
+                          placeholder="Duration (e.g. 3h 20m)"
+                        />
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <select
+                          value={editData.category}
+                          onChange={(e) => setEditData((v) => ({ ...v, category: e.target.value }))}
+                          className="input-field"
+                        >
+                          {['Mathematics','Programming','Humanities','Arts','Science','Languages'].map((c) => (
+                            <option key={c}>{c}</option>
+                          ))}
+                        </select>
+                        <select
+                          value={editData.level}
+                          onChange={(e) => setEditData((v) => ({ ...v, level: e.target.value }))}
+                          className="input-field"
+                        >
+                          <option>Beginner</option><option>Intermediate</option><option>Advanced</option>
+                        </select>
+                      </div>
+                      <textarea
+                        value={editData.description}
+                        onChange={(e) => setEditData((v) => ({ ...v, description: e.target.value }))}
+                        className="input-field resize-none"
+                        placeholder="Course description"
+                        rows={3}
+                      />
+                      <div>
+                        <label className="text-xs font-semibold" style={{ color: 'var(--text-muted)' }}>Course Thumbnail</label>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => {
+                            const f = e.target.files?.[0] || null;
+                            setThumbnailFile(f);
+                            setRemoveThumb(false);
+                            setThumbnailPreview(f ? URL.createObjectURL(f) : (course?.thumbnail || ''));
+                          }}
+                          className="mt-1"
+                        />
+                        {thumbnailPreview && !removeThumb && (
+                          <img src={thumbnailPreview} alt="course thumbnail preview" className="mt-2 w-40 h-24 object-cover rounded" />
+                        )}
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          className="btn-secondary text-xs"
+                          onClick={() => {
+                            setThumbnailFile(null);
+                            setThumbnailPreview('');
+                            setRemoveThumb(true);
+                          }}
+                        >
+                          Remove Thumbnail
+                        </button>
+                        <button
+                          type="button"
+                          disabled={updateCourseMutation.isPending}
+                          className="btn-primary text-xs"
+                          onClick={handleUpdateCourse}
+                        >
+                          {updateCourseMutation.isPending ? 'Saving...' : 'Save Changes'}
+                        </button>
+                      </div>
+                    </div>
+                  )}
 
                   {isAddLessonOpen && (
                     <div className="space-y-3">

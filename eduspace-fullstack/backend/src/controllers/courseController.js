@@ -52,20 +52,22 @@ exports.getCourse = async (req, res) => {
 // ── Create course (teacher/admin) ──────────────────────────────
 exports.createCourse = async (req, res) => {
   try {
-    const { title, description, category, level, duration, bgGradient, tags, sections } = req.body;
+    const { title, description, category, level, duration, bgGradient, tags, sections, isPublished = true } = req.body;
     const thumbnail = req.file ? `/uploads/thumbnails/${req.file.filename}` : null;
 
     const course = await Course.create({
       title, description, category, level, duration, bgGradient,
       tags: typeof tags === 'string' ? JSON.parse(tags) : tags || [],
+      isPublished: typeof isPublished === 'string' ? isPublished === 'true' : !!isPublished,
       teacherId: req.user.id,
       thumbnail,
     });
 
     // Create sections and lessons if provided
-    if (sections && Array.isArray(sections)) {
-      for (let si = 0; si < sections.length; si++) {
-        const sec = sections[si];
+    const parsedSections = typeof sections === 'string' ? JSON.parse(sections) : sections;
+    if (parsedSections && Array.isArray(parsedSections)) {
+      for (let si = 0; si < parsedSections.length; si++) {
+        const sec = parsedSections[si];
         const section = await Section.create({ courseId: course.id, title: sec.title, order: si });
         if (sec.lessons && Array.isArray(sec.lessons)) {
           for (let li = 0; li < sec.lessons.length; li++) {
@@ -102,8 +104,14 @@ exports.updateCourse = async (req, res) => {
       return res.status(403).json({ success: false, message: 'Forbidden' });
 
     const updates = { ...req.body };
+    const removeThumbnail =
+      updates.removeThumbnail === true ||
+      updates.removeThumbnail === 'true' ||
+      updates.thumbnail === '';
     if (req.file) updates.thumbnail = `/uploads/thumbnails/${req.file.filename}`;
+    if (removeThumbnail) updates.thumbnail = null;
     if (updates.tags && typeof updates.tags === 'string') updates.tags = JSON.parse(updates.tags);
+    delete updates.removeThumbnail;
 
     await course.update(updates);
     res.json({ success: true, data: course });

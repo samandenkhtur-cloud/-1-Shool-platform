@@ -1,7 +1,17 @@
 import axios from 'axios';
 
+const API_BASE = (import.meta.env.VITE_API_URL || 'http://localhost:4000/api').replace(/\/+$/, '');
+const API_ORIGIN = API_BASE.replace(/\/api$/i, '');
+
+const resolveFileUrl = (url) => {
+  if (!url) return url;
+  if (/^https?:\/\//i.test(url)) return url;
+  if (url.startsWith('/uploads/')) return `${API_ORIGIN}${url}`;
+  return url;
+};
+
 export const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:4000/api',
+  baseURL: API_BASE,
   headers: { 'Content-Type': 'application/json' },
   timeout: 10000,
 });
@@ -34,14 +44,14 @@ const normalizeLesson = (l) => ({
   courseId: l.courseId,
   sectionId: l.sectionId,
   section: l.section?.title || l.section || '',
-  videoUrl: l.videoUrl,
+  videoUrl: resolveFileUrl(l.videoUrl),
   videoType: l.videoType,
   order: l.order ?? 0,
   isFree: !!l.isFree,
   isCompleted: !!l.isCompleted,
   materials: safeArray(l.materials).map((m) => {
     if (typeof m === 'string') return { name: m, fileUrl: null };
-    return { id: m.id, name: m.name, fileUrl: m.fileUrl };
+    return { id: m.id, name: m.name, fileUrl: resolveFileUrl(m.fileUrl) };
   }).filter((m) => m?.name),
 });
 
@@ -63,7 +73,7 @@ const normalizeCourse = (c) => {
     category: c.category,
     level: c.level,
     duration: c.duration,
-    thumbnail: c.thumbnail,
+    thumbnail: resolveFileUrl(c.thumbnail),
     bgGradient: c.bgGradient || 'from-blue-500 to-indigo-600',
     tags: safeArray(c.tags),
     lessonsCount,
@@ -131,7 +141,13 @@ export const authService = {
 
 export const coursesService = {
   async getCourses({ category, level, search, page, limit } = {}) {
-    const resp = await apiClient.get('/courses', { params: { category, level, search, page, limit } });
+    const params = {};
+    if (category && category !== 'all') params.category = category;
+    if (level && level !== 'all') params.level = level;
+    if (search) params.search = search;
+    if (page) params.page = page;
+    if (limit) params.limit = limit;
+    const resp = await apiClient.get('/courses', { params });
     const data = resp.data?.data || { courses: [], total: 0, page: 1, limit: 12 };
     return {
       ...data,
@@ -164,7 +180,52 @@ export const coursesService = {
     return { success: true };
   },
   async createCourse(data) {
+    const hasFile = data?.thumbnail instanceof File;
+    if (hasFile) {
+      const form = new FormData();
+      Object.entries(data).forEach(([key, value]) => {
+        if (value === undefined || value === null) return;
+        if (key === 'thumbnail') {
+          form.append('thumbnail', value);
+          return;
+        }
+        if (Array.isArray(value) || typeof value === 'object') {
+          form.append(key, JSON.stringify(value));
+          return;
+        }
+        form.append(key, value);
+      });
+      const resp = await apiClient.post('/courses', form, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+      return resp.data?.data ? normalizeCourse(resp.data.data) : null;
+    }
     const resp = await apiClient.post('/courses', data);
+    return resp.data?.data ? normalizeCourse(resp.data.data) : null;
+  },
+  async updateCourse(id, data) {
+    const hasFile = data?.thumbnail instanceof File;
+    const removeThumbnail = data?.removeThumbnail === true;
+    if (hasFile || removeThumbnail) {
+      const form = new FormData();
+      Object.entries(data || {}).forEach(([key, value]) => {
+        if (value === undefined || value === null) return;
+        if (key === 'thumbnail') {
+          form.append('thumbnail', value);
+          return;
+        }
+        if (Array.isArray(value) || typeof value === 'object') {
+          form.append(key, JSON.stringify(value));
+          return;
+        }
+        form.append(key, value);
+      });
+      const resp = await apiClient.patch(`/courses/${id}`, form, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+      return resp.data?.data ? normalizeCourse(resp.data.data) : null;
+    }
+    const resp = await apiClient.patch(`/courses/${id}`, data);
     return resp.data?.data ? normalizeCourse(resp.data.data) : null;
   },
   async deleteCourse(id) {
@@ -300,6 +361,18 @@ export const studentsService = {
   async getStudent(id) {
     const resp = await apiClient.get(`/users/${id}`);
     return resp.data?.data || null;
+  },
+  async updateStudent(id, data) {
+    const resp = await apiClient.patch(`/users/${id}`, data);
+    return resp.data?.data || null;
+  },
+  async updateStudentStatus(id, isActive) {
+    const resp = await apiClient.patch(`/users/${id}/status`, { isActive });
+    return resp.data || { success: true };
+  },
+  async deleteStudent(id) {
+    const resp = await apiClient.delete(`/users/${id}`);
+    return resp.data || { success: true };
   },
 };
 

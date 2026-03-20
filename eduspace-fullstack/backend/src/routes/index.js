@@ -6,7 +6,7 @@ const auth       = require('../controllers/authController');
 const courses    = require('../controllers/courseController');
 const lessons    = require('../controllers/lessonController');
 const {
-  getUsers, getUser, updateUserStatus, getStudentStats,
+  getUsers, getUser, updateUserStatus, updateUser, deleteUser, getStudentStats,
   getNotifications, markRead, markAllRead,
   getPlatformStats, getCourseEngagement, getEnrollmentTrend,
   getSessions, createSession, updateSession, deleteSession,
@@ -86,6 +86,8 @@ userRouter.get('/',              authenticate, authorize('admin'), getUsers);
 userRouter.get('/stats',         authenticate, getStudentStats);
 userRouter.get('/:id',           authenticate, authorize('teacher','admin'), getUser);
 userRouter.patch('/:id/status',  authenticate, authorize('admin'), updateUserStatus);
+userRouter.patch('/:id',         authenticate, authorize('admin'), updateUser);
+userRouter.delete('/:id',        authenticate, authorize('admin'), deleteUser);
 userRouter.get('/:id/stats',     authenticate, authorize('teacher','admin'), getStudentStats);
 
 // ═══════════════════════════════════════════

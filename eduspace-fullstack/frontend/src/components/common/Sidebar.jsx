@@ -1,6 +1,6 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import {
-  LayoutDashboard, BookOpen, Radio, PlayCircle, Library,
+  LayoutDashboard, BookOpen, Library,
   GraduationCap, Settings, LogOut, Users, BarChart3,
   ChevronLeft, ChevronRight, PlusCircle, ShieldCheck,
 } from 'lucide-react';
@@ -21,8 +21,6 @@ export function Sidebar({ collapsed, onToggle }) {
       items: [
         { label: t.dashboard,    icon: LayoutDashboard, to: '/dashboard',    roles: ['student','teacher','admin'] },
         { label: t.courses,      icon: BookOpen,        to: '/courses',       roles: ['student','teacher','admin'] },
-        { label: t.liveLessons,  icon: Radio,           to: '/lessons/live',  roles: ['student','teacher','admin'], dot: true },
-        { label: t.recorded,     icon: PlayCircle,      to: '/lessons',       roles: ['student','teacher','admin'] },
         { label: t.library,      icon: Library,         to: '/library',       roles: ['student','teacher','admin'] },
       ],
     },

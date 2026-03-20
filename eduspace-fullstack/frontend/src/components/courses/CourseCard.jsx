@@ -11,12 +11,21 @@ const progressColorMap = {
 
 export function CourseCard({ course, enrolled, onEnroll, enrolling }) {
   const pColor = progressColorMap[course.id] || 'blue';
+  const hasThumb = !!course.thumbnail;
 
   return (
     <div className="card card-hover flex flex-col overflow-hidden group animate-fade-in">
       {/* Thumbnail */}
       <Link to={`/courses/${course.id}`} className="block relative overflow-hidden h-40 flex-shrink-0">
-        <div className={`absolute inset-0 bg-gradient-to-br ${course.bgGradient} opacity-90`} />
+        {hasThumb && (
+          <img
+            src={course.thumbnail}
+            alt={`${course.title} thumbnail`}
+            className="absolute inset-0 w-full h-full object-cover"
+            loading="lazy"
+          />
+        )}
+        <div className={`absolute inset-0 ${hasThumb ? 'bg-black/35' : `bg-gradient-to-br ${course.bgGradient} opacity-90`}`} />
         <div className="absolute inset-0 flex items-center justify-center">
           <span className="text-5xl filter drop-shadow-lg">{getCategoryIcon(course.category)}</span>
         </div>

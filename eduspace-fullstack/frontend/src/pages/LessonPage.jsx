@@ -31,6 +31,29 @@ export function LessonPage() {
 
   const videoId = getVideoId(lesson);
   const apiBase = (import.meta.env.VITE_API_URL || 'http://localhost:4000/api').replace(/\/api\/?$/, '');
+  const getFileTypeLabel = (name, url) => {
+    const source = name || url || '';
+    const match = source.match(/\.([A-Za-z0-9]+)(?:\?|#|$)/);
+    if (!match) return 'FILE';
+    return match[1].toUpperCase();
+  };
+  const getFileTypeStyle = (label) => {
+    switch (label) {
+      case 'PPT':
+      case 'PPTX':
+        return { background: '#fff7ed', color: '#c2410c' };
+      case 'DOC':
+      case 'DOCX':
+        return { background: '#eff6ff', color: '#1d4ed8' };
+      case 'PDF':
+        return { background: '#fef2f2', color: '#b91c1c' };
+      case 'XLS':
+      case 'XLSX':
+        return { background: '#ecfdf5', color: '#047857' };
+      default:
+        return { background: 'var(--surface)', color: 'var(--text-muted)' };
+    }
+  };
 
 
   const isEnrolled   = (user?.enrolledCourses || []).includes(lesson?.courseId);
@@ -109,17 +132,33 @@ export function LessonPage() {
                     const name = typeof m === 'string' ? m : m?.name;
                     const fileUrl = typeof m === 'string' ? null : m?.fileUrl;
                     const href = fileUrl ? `${apiBase}${fileUrl}` : null;
+                    const fileType = getFileTypeLabel(name, fileUrl);
+                    const fileTypeStyle = getFileTypeStyle(fileType);
                     return href ? (
                       <a key={m?.id || idx} href={href} download
-                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors text-brand-600 dark:text-brand-400"
+                        className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors text-brand-600 dark:text-brand-400"
                         style={{ background: 'var(--brand-light)' }}>
-                        <Download className="w-3 h-3" /> {name}
+                        <Download className="w-3 h-3" />
+                        <span className="truncate max-w-[180px]">{name}</span>
+                        <span className="ml-1 px-1.5 py-0.5 rounded text-[10px] font-bold tracking-wide"
+                          style={fileTypeStyle}>
+                          {fileType}
+                        </span>
+                        <span className="ml-1 text-[10px] font-semibold uppercase tracking-wide"
+                          style={{ color: 'var(--text-muted)' }}>
+                          Download
+                        </span>
                       </a>
                     ) : (
                       <span key={m?.id || idx}
-                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-brand-600 dark:text-brand-400"
+                        className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold text-brand-600 dark:text-brand-400 opacity-70"
                         style={{ background: 'var(--brand-light)' }}>
-                        <Download className="w-3 h-3" /> {name}
+                        <Download className="w-3 h-3" />
+                        <span className="truncate max-w-[180px]">{name}</span>
+                        <span className="ml-1 px-1.5 py-0.5 rounded text-[10px] font-bold tracking-wide"
+                          style={fileTypeStyle}>
+                          {fileType}
+                        </span>
                       </span>
                     );
                   })}

@@ -1,7 +1,7 @@
 // ════════════════════════════════════════════════════════════════
 // userController.js
 // ════════════════════════════════════════════════════════════════
-const { User, Course, Enrollment, Progress } = require('../models');
+const { User, Course, Enrollment, Progress, Notification } = require('../models');
 const { Op } = require('sequelize');
 
 exports.getUsers = async (req, res) => {
@@ -53,6 +53,44 @@ exports.updateUserStatus = async (req, res) => {
   }
 };
 
+exports.updateUser = async (req, res) => {
+  try {
+    const { name, email } = req.body;
+    const payload = {};
+    if (name !== undefined) payload.name = name;
+    if (email !== undefined) payload.email = email;
+    if (Object.keys(payload).length === 0) {
+      return res.status(400).json({ success: false, message: 'No changes provided' });
+    }
+
+    const user = await User.findByPk(req.params.id);
+    if (!user) return res.status(404).json({ success: false, message: 'User not found' });
+
+    await user.update(payload);
+    const updated = await User.findByPk(req.params.id, {
+      attributes: { exclude: ['password','verifyToken','resetPasswordToken','resetPasswordExpiry'] },
+    });
+    res.json({ success: true, data: updated });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+exports.deleteUser = async (req, res) => {
+  try {
+    const user = await User.findByPk(req.params.id);
+    if (!user) return res.status(404).json({ success: false, message: 'User not found' });
+
+    await Enrollment.destroy({ where: { userId: user.id } });
+    await Progress.destroy({ where: { userId: user.id } });
+    await Notification.destroy({ where: { userId: user.id } });
+    await user.destroy();
+
+    res.json({ success: true, message: 'User deleted' });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
 exports.getStudentStats = async (req, res) => {
   try {
     const userId = req.params.id || req.user.id;
@@ -67,8 +105,6 @@ exports.getStudentStats = async (req, res) => {
 // ════════════════════════════════════════════════════════════════
 // notificationController.js
 // ════════════════════════════════════════════════════════════════
-const { Notification } = require('../models');
-
 exports.getNotifications = async (req, res) => {
   try {
     const notifications = await Notification.findAll({
@@ -234,6 +270,8 @@ module.exports = {
   getUsers: exports.getUsers,
   getUser:  exports.getUser,
   updateUserStatus: exports.updateUserStatus,
+  updateUser: exports.updateUser,
+  deleteUser: exports.deleteUser,
   getStudentStats:  exports.getStudentStats,
   // notifications
   getNotifications: exports.getNotifications,

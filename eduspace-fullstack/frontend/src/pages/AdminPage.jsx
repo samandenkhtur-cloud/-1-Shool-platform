@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   ShieldCheck, BookOpen, Users, BarChart3, PlusCircle, Edit3, Trash2,
   Radio, Star, Clock, CheckCircle2, Search, X, ToggleRight
@@ -20,6 +21,7 @@ const TABS = [
 
 export function AdminPage() {
   const [tab, setTab] = useState('overview');
+  const navigate = useNavigate();
 
   return (
     <div className="space-y-5 animate-fade-in">
@@ -52,7 +54,7 @@ export function AdminPage() {
       </div>
 
       {tab === 'overview'  && <AdminOverview />}
-      {tab === 'courses'   && <AdminCourses />}
+      {tab === 'courses'   && <AdminCourses navigate={navigate} />}
       {tab === 'students'  && <AdminStudentsTab />}
       {tab === 'live'      && <AdminLive />}
     </div>
@@ -116,7 +118,7 @@ function AdminOverview() {
 }
 
 /* ── Courses Management ───────────────────────── */
-function AdminCourses() {
+function AdminCourses({ navigate }) {
   const { data, isLoading, refetch } = useCourses();
   const courses = data?.courses || [];
   const deleteMutation = useDeleteCourse();
@@ -209,7 +211,8 @@ function AdminCourses() {
                       <button className="p-1.5 rounded-lg transition-colors" title="Edit"
                         style={{ color: 'var(--text-muted)' }}
                         onMouseEnter={e => e.currentTarget.style.background = 'var(--surface)'}
-                        onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
+                        onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                        onClick={() => navigate(`/courses/${c.id}`)}>
                         <Edit3 className="w-4 h-4" />
                       </button>
                       <button className="p-1.5 rounded-lg transition-colors text-rose-500" title="Delete"
@@ -251,6 +254,7 @@ function CreateCourseForm({ onClose, onCreated }) {
         description: form.description || 'No description',
         category: form.category,
         level: form.level,
+        isPublished: true,
       });
       toast.success('Course created successfully!');
       onCreated?.();

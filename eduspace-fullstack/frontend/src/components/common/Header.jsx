@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Search, Bell, ChevronDown, X, Sun, Moon, Zap, Globe } from 'lucide-react';
+import { Search, Bell, ChevronDown, X, Sun, Moon, Globe } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { cn, getNotificationIcon } from '../../lib/utils';
 import { useAuth } from '../../hooks/useAuth';
@@ -9,20 +9,16 @@ import { useNotifications, useMarkAllNotificationsRead } from '../../hooks/useDa
 import { Avatar } from '../ui/Avatar';
 import { Badge } from '../ui/Badge';
 
-const ROLES = ['student', 'teacher', 'admin'];
-
 export function Header({ sidebarCollapsed }) {
-  const { user, switchRole } = useAuth();
+  const { user } = useAuth();
   const { dark, toggle }     = useTheme();
   const { lang, setLang, t, cycleLang } = useLocale();
 
   const [search,    setSearch]    = useState('');
   const [showNotifs, setShowNotifs] = useState(false);
-  const [showRole,   setShowRole]   = useState(false);
   const [showLang,   setShowLang]   = useState(false);
 
   const notifRef = useRef(null);
-  const roleRef  = useRef(null);
   const langRef  = useRef(null);
   const navigate = useNavigate();
 
@@ -33,7 +29,6 @@ export function Header({ sidebarCollapsed }) {
   useEffect(() => {
     const h = (e) => {
       if (notifRef.current && !notifRef.current.contains(e.target)) setShowNotifs(false);
-      if (roleRef.current  && !roleRef.current.contains(e.target))  setShowRole(false);
       if (langRef.current  && !langRef.current.contains(e.target))  setShowLang(false);
     };
     document.addEventListener('mousedown', h);
@@ -54,7 +49,7 @@ export function Header({ sidebarCollapsed }) {
       style={{ background: 'var(--header-bg)', borderBottom: '1px solid var(--border-col)' }}
     >
       {/* Search */}
-      <form onSubmit={handleSearch} className="flex-1 max-w-lg">
+      {/* <form onSubmit={handleSearch} className="flex-1 max-w-lg">
         <div className="relative">
           <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: 'var(--text-muted)' }} />
           <input
@@ -69,7 +64,7 @@ export function Header({ sidebarCollapsed }) {
             </button>
           )}
         </div>
-      </form>
+      </form> */}
 
       <div className="flex items-center gap-2 ml-auto">
 
@@ -137,42 +132,6 @@ export function Header({ sidebarCollapsed }) {
             : <Moon className="w-4 h-4 text-brand-600" />
           }
         </button>
-
-        {/* ── Role switcher ── */}
-        <div ref={roleRef} className="relative">
-          <button
-            onClick={() => setShowRole((v) => !v)}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-xl transition-colors"
-            style={{ background: 'var(--surface)', border: '1px solid var(--border-col)' }}
-          >
-            <Zap className="w-3.5 h-3.5 text-brand-500" />
-            <span className="text-xs font-bold capitalize text-brand-600 dark:text-brand-400">{user?.role}</span>
-            <ChevronDown className="w-3.5 h-3.5" style={{ color: 'var(--text-muted)' }} />
-          </button>
-          {showRole && (
-            <div
-              className="absolute right-0 top-full mt-2 w-44 rounded-2xl shadow-dropdown py-2 animate-slide-up z-50"
-              style={{ background: 'var(--card-bg)', border: '1px solid var(--border-col)' }}
-            >
-              <p className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest" style={{ color: 'var(--text-muted)' }}>
-                {t.demoRole}
-              </p>
-              {ROLES.map((r) => (
-                <button
-                  key={r}
-                  onClick={() => { switchRole(r); setShowRole(false); }}
-                  className="w-full text-left px-3 py-2 text-sm capitalize flex items-center gap-2 transition-colors"
-                  style={{ color: user?.role === r ? 'var(--brand)' : 'var(--text-main)', fontWeight: user?.role === r ? 700 : 500 }}
-                  onMouseEnter={e => user?.role !== r && (e.currentTarget.style.background = 'var(--surface)')}
-                  onMouseLeave={e => user?.role !== r && (e.currentTarget.style.background = 'transparent')}
-                >
-                  <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: user?.role === r ? 'var(--brand)' : 'var(--border-col)' }} />
-                  {r}
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
 
         {/* ── Notifications ── */}
         <div ref={notifRef} className="relative">

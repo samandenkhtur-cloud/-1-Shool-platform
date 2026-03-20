@@ -97,14 +97,15 @@ export function AuthProvider({ children }) {
 
   const updateProfile = useCallback(async (profileData) => {
     const resp = await authService.updateProfile(profileData);
-    const updatedUser = resp.user || resp.data?.user || resp.data;
+    const updatedUser = resp?.user || resp?.data?.user || resp?.data || resp;
     if (updatedUser) {
-      localStorage.setItem('auth_user', JSON.stringify(updatedUser));
-      setUser(updatedUser);
-      return updatedUser;
+      const enriched = await enrichUser(updatedUser);
+      localStorage.setItem('auth_user', JSON.stringify(enriched));
+      setUser(enriched);
+      return enriched;
     }
     throw new Error('Failed to update profile');
-  }, []);
+  }, [enrichUser]);
 
   return (
     <AuthContext.Provider value={{ user, loading, login, googleLogin, register, logout, switchRole, refreshUser, updateProfile }}>

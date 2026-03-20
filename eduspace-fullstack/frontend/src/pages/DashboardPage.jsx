@@ -2,9 +2,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { useLocale } from '../hooks/useLocale';
-import { useCoursesWithProgress, useLessonsTable, useEnrollCourse } from '../hooks/useData';
+import { useCoursesWithProgress, useEnrollCourse } from '../hooks/useData';
 import { WelcomeBanner } from '../components/dashboard/WelcomeBanner';
-import { LessonsTable } from '../components/dashboard/LessonsTable';
 import { CourseCard } from '../components/courses/CourseCard';
 import { CourseCardSkeleton } from '../components/ui/Skeleton';
 import { EmptyCourses } from '../components/ui/EmptyState';
@@ -19,7 +18,6 @@ export function DashboardPage() {
   const isStudent   = user?.role === 'student';
 
   const coursesQuery  = useCoursesWithProgress();
-  const lessonsQuery  = useLessonsTable();
   const enrollMutation = useEnrollCourse();
 
   const allCourses     = coursesQuery.data?.courses || [];
@@ -78,13 +76,6 @@ export function DashboardPage() {
         )}
       </section>
 
-      <section>
-        <LessonsTable
-          lessons={lessonsQuery.data || []}
-          loading={lessonsQuery.isLoading}
-          error={lessonsQuery.isError}
-        />
-      </section>
     </div>
   );
 }

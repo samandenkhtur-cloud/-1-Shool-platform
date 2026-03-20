@@ -157,6 +157,7 @@ export function CreateCoursePage() {
     title: '', description: '', teacher: user?.name || '',
     category: 'Programming', level: 'Beginner', duration: '',
     bgGradient: GRADIENTS[0].value, tags: '',
+    thumbnail: null, thumbnailPreview: '',
   });
   const [sections, setSections] = useState([{ id: 's1', title: '', videos: [] }]);
   const [errors, setErrors]     = useState({});
@@ -206,6 +207,7 @@ export function CreateCoursePage() {
         sections: normalizedSections,
         lessonsCount: totalVideos,
         tags: form.tags.split(',').map((t) => t.trim()).filter(Boolean),
+        isPublished: true,
       });
       toast.success('Course published successfully! 🎉');
       navigate('/courses');
@@ -263,6 +265,21 @@ export function CreateCoursePage() {
                 placeholder="What will students learn, prerequisites, and course goals…"
                 rows={4} className={cn('input-field resize-none', errors.description && 'border-rose-400')} />
               {errors.description && <p className="text-xs text-rose-500 mt-1">{errors.description}</p>}
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold mb-1.5" style={{ color: 'var(--text-muted)' }}>Course Thumbnail</label>
+              <input type="file" accept="image/*" className="input-field" onChange={(e) => {
+                const file = e.target.files?.[0] || null;
+                setForm((f) => ({
+                  ...f,
+                  thumbnail: file,
+                  thumbnailPreview: file ? URL.createObjectURL(file) : '',
+                }));
+              }} />
+              {form.thumbnailPreview && (
+                <img src={form.thumbnailPreview} alt="course thumbnail" className="mt-2 w-32 h-20 object-cover rounded" />
+              )}
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

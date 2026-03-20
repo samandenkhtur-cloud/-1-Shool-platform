@@ -8,8 +8,6 @@ import { DashboardPage }     from './pages/DashboardPage';
 import { CoursesPage }       from './pages/CoursesPage';
 import { CourseDetailPage }  from './pages/CourseDetailPage';
 import { LessonPage }        from './pages/LessonPage';
-import { LessonsPage }       from './pages/LessonsPage';
-import { LiveLessonsPage }   from './pages/LiveLessonsPage';
 import { AnalyticsPage }     from './pages/AnalyticsPage';
 import { StudentsPage }      from './pages/StudentsPage';
 import { AdminPage }         from './pages/AdminPage';
@@ -34,8 +32,6 @@ const router = createBrowserRouter([
         { path: '/courses',        element: <CoursesPage /> },
         { path: '/courses/new',    element: <CreateCoursePage /> },
         { path: '/courses/:id',    element: <CourseDetailPage /> },
-        { path: '/lessons',        element: <LessonsPage /> },
-        { path: '/lessons/live',   element: <LiveLessonsPage /> },
         { path: '/lessons/:id',    element: <LessonPage /> },
         { path: '/library',        element: <LibraryPage /> },
         { path: '/analytics',      element: <AnalyticsPage /> },

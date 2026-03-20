@@ -51,6 +51,17 @@ export const useDeleteCourse = () => {
   return useMutation({ mutationFn: coursesService.deleteCourse, onSuccess: () => qc.invalidateQueries({ queryKey: ['courses'] }) });
 };
 
+export const useUpdateCourse = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, data }) => coursesService.updateCourse(id, data),
+    onSuccess: (_, { id }) => {
+      qc.invalidateQueries({ queryKey: ['courses'] });
+      qc.invalidateQueries({ queryKey: ['course', id] });
+    },
+  });
+};
+
 export const useUpdateProfile = () => {
   const qc = useQueryClient();
   return useMutation({ mutationFn: authService.updateProfile, onSuccess: () => qc.invalidateQueries({ queryKey: ['user'] }) });
@@ -142,6 +153,38 @@ export const useStudents = () =>
 
 export const useStudent = (id) =>
   useQuery({ queryKey: ['student', id], queryFn: () => studentsService.getStudent(id), enabled: !!id, staleTime: 300_000 });
+
+export const useUpdateStudent = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, data }) => studentsService.updateStudent(id, data),
+    onSuccess: (_, { id }) => {
+      qc.invalidateQueries({ queryKey: ['students'] });
+      qc.invalidateQueries({ queryKey: ['student', id] });
+    },
+  });
+};
+
+export const useUpdateStudentStatus = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, isActive }) => studentsService.updateStudentStatus(id, isActive),
+    onSuccess: (_, { id }) => {
+      qc.invalidateQueries({ queryKey: ['students'] });
+      qc.invalidateQueries({ queryKey: ['student', id] });
+    },
+  });
+};
+
+export const useDeleteStudent = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: studentsService.deleteStudent,
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['students'] });
+    },
+  });
+};
 
 // ── Analytics ────────────────────────────────────────────
 export const useAnalytics = (enabled = true) =>
